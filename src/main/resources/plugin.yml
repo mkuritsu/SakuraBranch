@@ -1,0 +1,5 @@
+main: io.github.itstaylz.sakurabranch.SakuraBranch
+name: Sakurabranch
+version: '${project.version}'
+authors: [ itsTaylz ]
+api-version: 1.18
