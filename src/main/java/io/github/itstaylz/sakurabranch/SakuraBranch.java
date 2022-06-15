@@ -1,32 +1,29 @@
 package io.github.itstaylz.sakurabranch;
 
-import io.github.itstaylz.sakurabranch.gui.MenuListener;
-import io.github.itstaylz.sakurabranch.upgrades.HoeUpgrades;
+import io.github.itstaylz.hexlib.utils.StringUtils;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerEggThrowEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SakuraBranch extends JavaPlugin implements Listener {
 
-    public static Economy ECONOMY;
+    private static Economy economy;
 
     @Override
     public void onEnable() {
-        Bukkit.getPluginManager().registerEvents(new HoeListener(), this);
-        Bukkit.getPluginManager().registerEvents(new MenuListener(), this);
         if (!setupEconomy()) {
             Bukkit.getPluginManager().disablePlugin(this);
             getLogger().severe("Failed to setup economy! Check if you have vault and a compatible economy plugin.");
             return;
         }
-        // DEBUG
-        Bukkit.getPluginManager().registerEvents(this, this);
+        Bukkit.getPluginManager().registerEvents(new HoeListener(), this);
+        getCommand("sakurabranch").setExecutor(new SakuraBranchCommand());
     }
 
     private boolean setupEconomy() {
@@ -35,19 +32,25 @@ public final class SakuraBranch extends JavaPlugin implements Listener {
         RegisteredServiceProvider<Economy> provider = Bukkit.getServicesManager().getRegistration(Economy.class);
         if (provider == null)
             return false;
-        ECONOMY = provider.getProvider();
+        economy = provider.getProvider();
         return true;
     }
 
-
-    // DEBUG
-    @EventHandler
-    private void onEgg(PlayerEggThrowEvent event) {
-        Player player = event.getPlayer();
-        ItemStack item = HoeManager.createNewHoe();
-        //HoeManager.addUpgrade(item, HoeUpgrades.AUTO_PICKUP, 1);
-        HoeManager.addUpgrade(item, HoeUpgrades.AUTO_PLANT, 1);
-        HoeManager.addUpgrade(item, HoeUpgrades.AUTO_SELL, 1);
-        player.getInventory().addItem(item);
+    public static Economy getEconomy() {
+        return economy;
     }
+
+    private static final class SakuraBranchCommand implements CommandExecutor {
+
+        @Override
+        public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+            if (sender instanceof Player player) {
+                player.getInventory().addItem(HoeManager.createNewHoe());
+            } else {
+                sender.sendMessage(StringUtils.colorize("&CThis command can only be used by players!"));
+            }
+            return true;
+        }
+    }
+
 }

@@ -3,3 +3,8 @@ name: Sakurabranch
 version: '${project.version}'
 authors: [ itsTaylz ]
 api-version: 1.18
+commands:
+
+  sakurabranch:
+    permission: sakurabranch.givecommand
+    permission-message: §7§l[§d§lSakura&b§lMC§7§l] §cNo permission

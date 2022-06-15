@@ -2,8 +2,6 @@ package io.github.itstaylz.sakurabranch;
 
 import io.github.itstaylz.sakurabranch.upgrades.HoeUpgrade;
 import io.github.itstaylz.sakurabranch.upgrades.HoeUpgrades;
-import io.github.itstaylz.sakurabranch.utils.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -11,7 +9,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
@@ -30,7 +27,8 @@ public class HoeListener implements Listener {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
         if (item != null && HoeManager.isSakuraBenchHoe(item) && event.getAction().name().contains("RIGHT")) {
-            HoeMenu menu = new HoeMenu();
+            event.setCancelled(true);
+            HoeMenu menu = new HoeMenu(item);
             menu.open(player);
         }
     }

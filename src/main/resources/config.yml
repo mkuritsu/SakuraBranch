@@ -1,0 +1,17 @@
+upgrades:
+  auto_sell:
+    - 25000
+  auto_pickup:
+    - 10000
+  auto_plant:
+    - 30000
+  multiplier:
+    - 20000
+    - 30000
+    - 40000
+    - 50000
+
+crops:
+  POTATOES:
+    price: 10
+    xp: 10

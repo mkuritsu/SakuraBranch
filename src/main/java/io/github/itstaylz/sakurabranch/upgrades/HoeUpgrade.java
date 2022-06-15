@@ -4,56 +4,47 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class HoeUpgrade<E extends Event> {
 
     private final String key, name;
-    private final int basePrice, maxLevel;
-
-    private final float priceMultiplier;
+    private final List<Integer> prices;
     private final Class<E> eventClass;
 
-    public HoeUpgrade(String key, String name, int basePrice, int maxLevel, float priceMultiplier, Class<E> eventClass) {
+    public HoeUpgrade(String key, String name, List<Integer> prices, Class<E> eventClass) {
         this.key = key;
         this.name = name;
-        this.basePrice = basePrice;
-        this.maxLevel = maxLevel;
-        this.priceMultiplier = priceMultiplier;
+        this.prices = prices;
         this.eventClass = eventClass;
     }
 
     public abstract void onTrigger(E event, Player player, ItemStack hoe, int upgradeLevel);
 
     public int getPrice(int level) {
-        int price = this.basePrice;
-        for (int i = 1; i < level; i++) {
-            price += price * priceMultiplier;
-        }
-        return price;
+        return this.prices.get(level - 1);
     }
 
     public String getKey() {
         return key;
     }
 
-    public float getPriceMultiplier() {
-        return priceMultiplier;
-    }
-
-    public int getBasePrice() {
-        return basePrice;
-    }
-
     public int getMaxLevel() {
-        return maxLevel;
+        return this.prices.size();
     }
 
     public String getName() {
         return name;
     }
 
-    public abstract ItemStack getMenuSkull();
+    public abstract ItemStack getMenuItem(ItemStack hoe);
 
     public Class<E> getEventClass() {
         return eventClass;
+    }
+
+    public List<HoeUpgrade<?>> getIncompatibleUpgrades() {
+        return new ArrayList<>();
     }
 }

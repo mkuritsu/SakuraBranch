@@ -16,10 +16,13 @@ public final class HoeUpgrades {
 
     public static final HoeUpgrade<?> AUTO_SELL = new AutoSellUpgrade();
 
+    public static final HoeUpgrade<?> MULTIPLIER = new MultiplierUpgrade();
+
     static {
         registerUpgrade(AUTO_PICKUP);
         registerUpgrade(AUTO_PLANT);
         registerUpgrade(AUTO_SELL);
+        registerUpgrade(MULTIPLIER);
     }
 
     private static void registerUpgrade(HoeUpgrade<?> upgrade) {
@@ -33,5 +36,13 @@ public final class HoeUpgrades {
 
     public static Set<HoeUpgrade<?>> getUpgrades(Class<? extends Event> eventClass) {
         return UPGRADES_MAP.get(eventClass);
+    }
+
+    public static Set<HoeUpgrade<?>> getAllUpgrades() {
+        Set<HoeUpgrade<?>> upgrades = new HashSet<>();
+        for (Set<HoeUpgrade<?>> set : UPGRADES_MAP.values()) {
+            upgrades.addAll(set);
+        }
+        return upgrades;
     }
 }
