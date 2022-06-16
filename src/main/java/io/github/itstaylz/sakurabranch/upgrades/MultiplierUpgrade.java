@@ -3,22 +3,22 @@ package io.github.itstaylz.sakurabranch.upgrades;
 import io.github.itstaylz.hexlib.items.SkullBuilder;
 import io.github.itstaylz.hexlib.utils.StringUtils;
 import io.github.itstaylz.sakurabranch.HoeManager;
+import io.github.itstaylz.sakurabranch.SakuraBranch;
+import io.github.itstaylz.sakurabranch.utils.CropUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
-
 public class MultiplierUpgrade extends HoeUpgrade<BlockDropItemEvent> {
 
-    // TODO make this
     public MultiplierUpgrade() {
-        super("sakurabench_upgrade_multiplier", "Multiplier", Arrays.asList(20000, 25000, 30000, 40000), BlockDropItemEvent.class);
+        super("sakurabench_upgrade_multiplier", "Multiplier", SakuraBranch.getPluginConfig().getUpgradePrices("multiplier"), BlockDropItemEvent.class);
     }
 
     @Override
     public void onTrigger(BlockDropItemEvent event, Player player, ItemStack hoe, int upgradeLevel) {
-
+        double multiplier = SakuraBranch.getPluginConfig().getMultiplierAmount(upgradeLevel);
+        CropUtils.giveCropXP(player, event.getBlockState(), multiplier);
     }
 
     @Override
@@ -28,16 +28,15 @@ public class MultiplierUpgrade extends HoeUpgrade<BlockDropItemEvent> {
                 .setDisplayName(StringUtils.colorize("&d&l" + getName()))
                 .setLore("", StringUtils.colorize("&7Multiply the amount of &bXp &7gained!"));
         int currentLevel = HoeManager.getUpgradeLevel(hoe, this);
-        int multiplier = currentLevel + 1;
+        double multiplier = 1;
+        if (currentLevel != 0)
+            multiplier = SakuraBranch.getPluginConfig().getMultiplierAmount(currentLevel);
         builder.addLore(StringUtils.colorize("&7Current: &b" + multiplier + "x"));
-        if (currentLevel == getMaxLevel()) {
-            builder.addLore(StringUtils.colorize("&a&lMAX LEVEL REACHED!"));
-        } else {
-            builder.addLore(StringUtils.colorize("&7Next: &b" + (multiplier+1) + "x"),
-                    StringUtils.colorize("&7Price: &a$" + getPrice(multiplier)));
+        if (currentLevel < getMaxLevel()) {
+            double nextMultiplier = SakuraBranch.getPluginConfig().getMultiplierAmount(currentLevel+1);
+            builder.addLore(StringUtils.colorize("&7Next: &b" + nextMultiplier + "x"));
         }
-        if (currentLevel > 0)
-            builder.addLore(StringUtils.colorize("&7Right-Click to &cRefund"));
+        addDefaultLore(builder, hoe);
         return builder.addLore("").build();
     }
 }

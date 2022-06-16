@@ -3,6 +3,7 @@ name: Sakurabranch
 version: '${project.version}'
 authors: [ itsTaylz ]
 api-version: 1.18
+depend: [Hexlib, Vault]
 commands:
 
   sakurabranch:

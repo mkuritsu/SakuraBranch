@@ -2,6 +2,7 @@ package io.github.itstaylz.sakurabranch;
 
 import io.github.itstaylz.sakurabranch.upgrades.HoeUpgrade;
 import io.github.itstaylz.sakurabranch.upgrades.HoeUpgrades;
+import io.github.itstaylz.sakurabranch.utils.CropUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -19,6 +20,10 @@ public class HoeListener implements Listener {
     private void onBlockDrop(BlockDropItemEvent event) {
         Player player = event.getPlayer();
         ItemStack item = player.getInventory().getItemInMainHand();
+        if (CropUtils.isCrop(event.getBlockState().getType()) && HoeManager.isSakuraBenchHoe(item))
+            HoeManager.increaseHarvestedCrops(item);
+        if (HoeManager.isSakuraBenchHoe(item) && !HoeManager.hasUpgrade(item, HoeUpgrades.MULTIPLIER))
+            CropUtils.giveCropXP(player, event.getBlockState(), 1);
         triggerUpgrades(event, player, item);
     }
 

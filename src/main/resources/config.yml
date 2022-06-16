@@ -11,7 +11,28 @@ upgrades:
     - 40000
     - 50000
 
-crops:
-  POTATOES:
-    price: 10
-    xp: 10
+multiplier_rates:
+  - 2.5
+  - 3.7
+  - 5.6
+  - 10.3
+
+prices:
+  POTATO: 1
+  WHEAT: 2
+  WHEAT_SEEDS: 3
+  CARROT: 4
+  BEETROOT_SEEDS: 5
+  BEETROOT: 6
+
+xp:
+  POTATOES: 1
+  BEETROOTS: 2
+  WHEAT: 3
+  CARROTS: 4
+
+seeds:
+  WHEAT: WHEAT_SEEDS
+  BEETROOTS: BEETROOT_SEEDS
+  CARROTS: CARROT
+  POTATOES: POTATO

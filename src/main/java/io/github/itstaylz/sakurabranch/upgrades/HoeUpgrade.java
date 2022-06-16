@@ -1,11 +1,13 @@
 package io.github.itstaylz.sakurabranch.upgrades;
 
+import io.github.itstaylz.hexlib.items.SkullBuilder;
+import io.github.itstaylz.hexlib.utils.StringUtils;
+import io.github.itstaylz.sakurabranch.HoeManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public abstract class HoeUpgrade<E extends Event> {
 
@@ -46,5 +48,46 @@ public abstract class HoeUpgrade<E extends Event> {
 
     public List<HoeUpgrade<?>> getIncompatibleUpgrades() {
         return new ArrayList<>();
+    }
+
+    protected void addDefaultLore(SkullBuilder builder, ItemStack hoe) {
+        int currentLevel = HoeManager.getUpgradeLevel(hoe, this);
+        if (currentLevel == getMaxLevel()) {
+            builder.addLore(StringUtils.colorize("&a&lMAX LEVEL REACHED!"));
+        } else {
+            Set<String> incompatibles = new HashSet<>();
+            for (HoeUpgrade<?> upgrade : getIncompatibleUpgrades()) {
+                if (HoeManager.hasUpgrade(hoe, upgrade))
+                    incompatibles.add(upgrade.getName());
+            }
+            if (incompatibles.isEmpty()) {
+                String price = formatNumber(getPrice(currentLevel + 1));
+                builder.addLore(StringUtils.colorize("&7Price: &a$" + price));
+                builder.addLore(StringUtils.colorize("&7Left-Click to &aBuy"));
+            } else {
+                String incompatibleString = StringUtils.appendArray(incompatibles.toArray(new String[0]), ",");
+                builder.addLore(StringUtils.colorize("&c&lINCOMPATIBLE WITH: &f" + incompatibleString));
+            }
+        }
+        if (currentLevel > 0)
+            builder.addLore(StringUtils.colorize("&7Right-Click to &cRefund"));
+    }
+
+    private String formatNumber(int number) {
+        Deque<String> deque = new ArrayDeque<>();
+        int counter = 0;
+        while (number > 0) {
+            if (counter == 3) {
+                deque.addFirst(",");
+                counter = 0;
+            }
+            deque.addFirst((number % 10) + "");
+            number /= 10;
+            counter++;
+        }
+        StringBuilder sb = new StringBuilder();
+        while(!deque.isEmpty())
+            sb.append(deque.pop());
+        return sb.toString();
     }
 }

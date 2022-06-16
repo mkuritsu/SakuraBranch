@@ -1,5 +1,6 @@
 package io.github.itstaylz.sakurabranch;
 
+import io.github.itstaylz.hexlib.utils.PlayerUtils;
 import io.github.itstaylz.hexlib.utils.StringUtils;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -8,12 +9,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SakuraBranch extends JavaPlugin implements Listener {
 
     private static Economy economy;
+    private static SakuraConfig config;
 
     @Override
     public void onEnable() {
@@ -22,6 +25,7 @@ public final class SakuraBranch extends JavaPlugin implements Listener {
             getLogger().severe("Failed to setup economy! Check if you have vault and a compatible economy plugin.");
             return;
         }
+        config = new SakuraConfig(this);
         Bukkit.getPluginManager().registerEvents(new HoeListener(), this);
         getCommand("sakurabranch").setExecutor(new SakuraBranchCommand());
     }
@@ -40,14 +44,32 @@ public final class SakuraBranch extends JavaPlugin implements Listener {
         return economy;
     }
 
+    public static SakuraConfig getPluginConfig() {
+        return config;
+    }
+
     private static final class SakuraBranchCommand implements CommandExecutor {
 
         @Override
         public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-            if (sender instanceof Player player) {
-                player.getInventory().addItem(HoeManager.createNewHoe());
+            if (args.length == 0) {
+                if (sender instanceof Player player) {
+                    player.getInventory().addItem(HoeManager.createNewHoe());
+                } else {
+                    sender.sendMessage(StringUtils.colorize("&cUse /" + label + " <player name>"));
+                }
             } else {
-                sender.sendMessage(StringUtils.colorize("&CThis command can only be used by players!"));
+                String playerName = args[0];
+                Player target = Bukkit.getPlayerExact(playerName);
+                if (target == null) {
+                    sender.sendMessage(StringUtils.colorize("&7&l[&d&lSakura&b&lMC&7&l] &cPlayer not found!"));
+                } else {
+                    ItemStack hoe = HoeManager.createNewHoe();
+                    if (PlayerUtils.canPickup(target, hoe))
+                        target.getInventory().addItem(hoe);
+                    else
+                        target.getWorld().dropItemNaturally(target.getLocation(), hoe);
+                }
             }
             return true;
         }

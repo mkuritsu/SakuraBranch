@@ -23,20 +23,20 @@ public class HoeManager {
 
     private static final JavaPlugin PLUGIN;
     private static final ItemStack HOE_ITEM;
-    private static final NamespacedKey HOE_KEY;
+    private static final NamespacedKey CROPS_KEY;
 
     static {
         PLUGIN = JavaPlugin.getPlugin(SakuraBranch.class);
-        HOE_KEY = new NamespacedKey(PLUGIN, "sakurabranch_hoe");
+        CROPS_KEY = new NamespacedKey(PLUGIN, "sakurabranch_crops");
         HOE_ITEM = new ItemBuilder(new ItemStack(Material.NETHERITE_HOE))
-                .setDisplayName(StringUtils.colorize("&d🌸 &d&lSakura&b&lBranch &d🌸"))
+                .setDisplayName(StringUtils.colorize("&d❀ &d&lSakura &b&lBranch &d❀"))
                 .addEnchant(Enchantment.DURABILITY, 1)
                 .setUnbreakable(true)
                 .addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES)
                 .build();
         refreshLore(HOE_ITEM);
         ItemMeta meta = HOE_ITEM.getItemMeta();
-        meta.getPersistentDataContainer().set(HOE_KEY, PersistentDataType.BYTE, (byte) 1);
+        meta.getPersistentDataContainer().set(CROPS_KEY, PersistentDataType.LONG, 0L);
         HOE_ITEM.setItemMeta(meta);
     }
 
@@ -46,9 +46,8 @@ public class HoeManager {
 
     public static boolean isSakuraBenchHoe(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
-        if (meta != null) {
-            return meta.getPersistentDataContainer().has(HOE_KEY, PersistentDataType.BYTE);
-        }
+        if (meta != null)
+            return meta.getPersistentDataContainer().has(CROPS_KEY, PersistentDataType.LONG);
         return false;
     }
 
@@ -97,12 +96,15 @@ public class HoeManager {
         for (HoeUpgrade<?> upgrade : HoeUpgrades.getAllUpgrades()) {
             if (hasUpgrade(hoe, upgrade)) {
                 count++;
-                lore.add(StringUtils.colorize("&7" + upgrade.getName() + " " + HoeManager.getUpgradeLevel(hoe, upgrade)));
+                lore.add(StringUtils.colorize("&d" + upgrade.getName() + " &b" + HoeManager.getUpgradeLevel(hoe, upgrade)));
             }
         }
         if (count > 0)
             lore.add("");
         lore.add(StringUtils.colorize("&7To access upgrade menu: &dRight Click"));
+        lore.add(" ");
+        lore.add(StringUtils.colorize("&dCrops Harvested: &b" + getHarvestedCrops(hoe)));
+        lore.add(" ");
         ItemMeta meta = hoe.getItemMeta();
         meta.setLore(lore);
         hoe.setItemMeta(meta);
@@ -148,5 +150,26 @@ public class HoeManager {
 
     public static boolean canRefund(ItemStack hoe, HoeUpgrade<?> upgrade) {
         return hasUpgrade(hoe, upgrade);
+    }
+
+    public static long getHarvestedCrops(ItemStack hoe) {
+        ItemMeta meta = hoe.getItemMeta();
+        if (meta == null)
+            return 0;
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        Long value = container.get(CROPS_KEY, PersistentDataType.LONG);
+        return value != null ? value : 0;
+    }
+
+    public static void increaseHarvestedCrops(ItemStack hoe) {
+        ItemMeta meta = hoe.getItemMeta();
+        if (meta == null)
+            return;
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        long current = getHarvestedCrops(hoe);
+        long newValue = current == Long.MAX_VALUE ? Long.MAX_VALUE : current + 1L;
+        container.set(CROPS_KEY, PersistentDataType.LONG, newValue);
+        hoe.setItemMeta(meta);
+        refreshLore(hoe);
     }
 }
