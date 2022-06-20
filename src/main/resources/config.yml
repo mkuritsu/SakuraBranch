@@ -1,15 +1,15 @@
 upgrades:
   auto_sell:
-    - 25000
+    - 25000.234
   auto_pickup:
-    - 10000
+    - 10000.123
   auto_plant:
-    - 30000
+    - 30000.3532
   multiplier:
-    - 20000
-    - 30000
-    - 40000
-    - 50000
+    - 20000.23
+    - 30000.234
+    - 40000.5425
+    - 50000.234
 
 multiplier_rates:
   - 2.5
@@ -18,12 +18,12 @@ multiplier_rates:
   - 10.3
 
 prices:
-  POTATO: 1
-  WHEAT: 2
-  WHEAT_SEEDS: 3
-  CARROT: 4
-  BEETROOT_SEEDS: 5
-  BEETROOT: 6
+  POTATO: 1.4
+  WHEAT: 2.3
+  WHEAT_SEEDS: 3.1
+  CARROT: 4.6
+  BEETROOT_SEEDS: 5.3
+  BEETROOT: 6.6
 
 xp:
   POTATOES: 1

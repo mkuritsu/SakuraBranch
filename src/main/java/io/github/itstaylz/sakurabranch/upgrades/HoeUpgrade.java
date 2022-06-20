@@ -7,15 +7,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.*;
 
 public abstract class HoeUpgrade<E extends Event> {
 
+    private static final DecimalFormat FORMATTER = new DecimalFormat("#,###.00");
+
+    static {
+        FORMATTER.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.US));
+    }
+
     private final String key, name;
-    private final List<Integer> prices;
+    private final List<Double> prices;
     private final Class<E> eventClass;
 
-    public HoeUpgrade(String key, String name, List<Integer> prices, Class<E> eventClass) {
+    public HoeUpgrade(String key, String name, List<Double> prices, Class<E> eventClass) {
         this.key = key;
         this.name = name;
         this.prices = prices;
@@ -24,7 +32,7 @@ public abstract class HoeUpgrade<E extends Event> {
 
     public abstract void onTrigger(E event, Player player, ItemStack hoe, int upgradeLevel);
 
-    public int getPrice(int level) {
+    public double getPrice(int level) {
         return this.prices.get(level - 1);
     }
 
@@ -61,8 +69,9 @@ public abstract class HoeUpgrade<E extends Event> {
                     incompatibles.add(upgrade.getName());
             }
             if (incompatibles.isEmpty()) {
-                String price = formatNumber(getPrice(currentLevel + 1));
-                builder.addLore(StringUtils.colorize("&7Price: &a$" + price));
+                double price = getPrice(currentLevel + 1);
+                String priceFormatted = FORMATTER.format(price);
+                builder.addLore(StringUtils.colorize("&7Price: &a$" + priceFormatted));
                 builder.addLore(StringUtils.colorize("&7Left-Click to &aBuy"));
             } else {
                 String incompatibleString = StringUtils.appendArray(incompatibles.toArray(new String[0]), ",");
@@ -71,23 +80,5 @@ public abstract class HoeUpgrade<E extends Event> {
         }
         if (currentLevel > 0)
             builder.addLore(StringUtils.colorize("&7Right-Click to &cRefund"));
-    }
-
-    private String formatNumber(int number) {
-        Deque<String> deque = new ArrayDeque<>();
-        int counter = 0;
-        while (number > 0) {
-            if (counter == 3) {
-                deque.addFirst(",");
-                counter = 0;
-            }
-            deque.addFirst((number % 10) + "");
-            number /= 10;
-            counter++;
-        }
-        StringBuilder sb = new StringBuilder();
-        while(!deque.isEmpty())
-            sb.append(deque.pop());
-        return sb.toString();
     }
 }

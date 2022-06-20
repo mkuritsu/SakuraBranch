@@ -17,22 +17,18 @@ public class SakuraConfig {
         this.configFile = new YamlFile(new File(plugin.getDataFolder(), "config.yml"));
     }
 
-    public void reload() {
-        this.configFile.reloadConfig();
-    }
-
-    public List<Integer> getUpgradePrices(String upgradeKey) {
+    public List<Double> getUpgradePrices(String upgradeKey) {
         String path = "upgrades." + upgradeKey;
         if (configFile.contains(path)) {
-            return this.configFile.getConfig().getIntegerList(path);
+            return this.configFile.getConfig().getDoubleList(path);
         }
         return new ArrayList<>();
     }
 
-    public int getSellPrice(Material material) {
+    public double getSellPrice(Material material) {
         String path = "prices." + material.name();
         if (configFile.contains(path)) {
-            return configFile.get(path, Integer.class);
+            return configFile.get(path, Double.class);
         }
         return -1;
     }

@@ -29,9 +29,9 @@ public class AutoSellUpgrade extends HoeUpgrade<BlockDropItemEvent> {
         Set<Item> toRemove = new HashSet<>();
         for (Item item : event.getItems()) {
             ItemStack stack = item.getItemStack();
-            int singlePrice = SakuraBranch.getPluginConfig().getSellPrice(stack.getType());
+            double singlePrice = SakuraBranch.getPluginConfig().getSellPrice(stack.getType());
             if (singlePrice != -1) {
-                int totalPrice = singlePrice * stack.getAmount();
+                double totalPrice = singlePrice * stack.getAmount();
                 SakuraBranch.getEconomy().depositPlayer(player, totalPrice);
                 PlayerUtils.sendActionbarMessage(player, StringUtils.colorize("&a+" + totalPrice + "$"));
                 toRemove.add(item);

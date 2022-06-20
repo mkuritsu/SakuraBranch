@@ -113,7 +113,7 @@ public class HoeManager {
     public static void buyUpgrade(ItemStack hoe, Player player, HoeUpgrade<?> upgrade) {
         double balance = SakuraBranch.getEconomy().getBalance(player);
         int currentLevel = getUpgradeLevel(hoe, upgrade);
-        int price = upgrade.getPrice(currentLevel + 1);
+        double price = upgrade.getPrice(currentLevel + 1);
         if (balance >= price) {
             SakuraBranch.getEconomy().withdrawPlayer(player, price);
             addUpgrade(hoe, upgrade, currentLevel + 1);
