@@ -3,6 +3,7 @@ package io.github.itstaylz.sakurabranch.upgrades;
 import io.github.itstaylz.hexlib.items.SkullBuilder;
 import io.github.itstaylz.hexlib.utils.StringUtils;
 import io.github.itstaylz.sakurabranch.SakuraBranch;
+import io.github.itstaylz.sakurabranch.utils.BlockUtils;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -20,6 +21,8 @@ public class AutoPlantUpgrade extends HoeUpgrade<BlockDropItemEvent> {
         Material type = event.getBlockState().getType();
         Material seeds = SakuraBranch.getPluginConfig().getSeeds(type);
         if (seeds != Material.AIR && player.getInventory().contains(seeds)) {
+            if (type == Material.SUGAR_CANE && BlockUtils.getBlockBellow(event.getBlock()).getType() == Material.SUGAR_CANE)
+                return;
             for (ItemStack item : player.getInventory().getStorageContents()) {
                 if (item != null && item.getType() == seeds) {
                     if (item.getAmount() > 1)
