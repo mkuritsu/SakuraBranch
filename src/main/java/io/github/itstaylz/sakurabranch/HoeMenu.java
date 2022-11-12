@@ -29,7 +29,7 @@ public class HoeMenu extends Menu {
     private final ItemStack hoe;
 
     public HoeMenu(ItemStack hoe) {
-        super(5*9, StringUtils.colorize("&d❀ &dBranch &bUpgrader &d❀"));
+        super(5*9, StringUtils.colorize("&d❀ &dBranch &bUpgrader &d❀"), false, true, null);
         this.hoe = hoe;
         addGlassPanels();
         addUpgradeToMenu(19, HoeUpgrades.AUTO_SELL);
