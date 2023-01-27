@@ -30,7 +30,7 @@ public class HoeManager {
         CROPS_KEY = new NamespacedKey(PLUGIN, "sakurabranch_crops");
         HOE_ITEM = new ItemBuilder(new ItemStack(Material.NETHERITE_HOE))
                 .setDisplayName(StringUtils.colorize("&d❀ &d&lSakura &b&lBranch &d❀"))
-                .addEnchant(Enchantment.DURABILITY, 1)
+                .addEnchantment(Enchantment.DURABILITY, 1)
                 .setUnbreakable(true)
                 .addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES)
                 .build();

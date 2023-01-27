@@ -1,9 +1,10 @@
 package io.github.itstaylz.sakurabranch;
 
 import io.github.itstaylz.hexlib.items.ItemBuilder;
-import io.github.itstaylz.hexlib.menus.Menu;
-import io.github.itstaylz.hexlib.menus.components.MenuButton;
-import io.github.itstaylz.hexlib.menus.components.MenuItem;
+import io.github.itstaylz.hexlib.menu.Menu;
+import io.github.itstaylz.hexlib.menu.MenuSettings;
+import io.github.itstaylz.hexlib.menu.components.Button;
+import io.github.itstaylz.hexlib.menu.components.Label;
 import io.github.itstaylz.hexlib.utils.StringUtils;
 import io.github.itstaylz.sakurabranch.upgrades.HoeUpgrade;
 import io.github.itstaylz.sakurabranch.upgrades.HoeUpgrades;
@@ -13,6 +14,11 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ItemStack;
 
 public class HoeMenu extends Menu {
+
+    private static final MenuSettings SETTINGS = MenuSettings.builder()
+            .withNumberOfRows(5)
+            .withTitle(StringUtils.colorize("&d❀ &dBranch &bUpgrader &d❀"))
+            .build();
 
     private static final ItemStack PURPLE_GLASS = new ItemBuilder(new ItemStack(Material.PURPLE_STAINED_GLASS_PANE))
             .setDisplayName(" ")
@@ -29,7 +35,7 @@ public class HoeMenu extends Menu {
     private final ItemStack hoe;
 
     public HoeMenu(ItemStack hoe) {
-        super(5*9, StringUtils.colorize("&d❀ &dBranch &bUpgrader &d❀"), false, true, null);
+        super(SETTINGS);
         this.hoe = hoe;
         addGlassPanels();
         addUpgradeToMenu(19, HoeUpgrades.AUTO_SELL);
@@ -41,24 +47,24 @@ public class HoeMenu extends Menu {
     private void addGlassPanels() {
         for (int i = 0; i < 9; i++) {
             if (i % 2 == 0)
-                addComponent(i, new MenuItem(PURPLE_GLASS));
+                setComponent(i, new Label(PURPLE_GLASS));
             else
-                addComponent(i, new MenuItem(CYAN_GLASS));
+                setComponent(i, new Label(CYAN_GLASS));
         }
         for (int i = 9; i < 36; i++) {
-            addComponent(i, new MenuItem(WHITE_GLASS));
+            setComponent(i, new Label(WHITE_GLASS));
         }
         for (int i = 36; i < 45; i++) {
             if (i % 2 == 0)
-                addComponent(i, new MenuItem(PURPLE_GLASS));
+                setComponent(i, new Label(PURPLE_GLASS));
             else
-                addComponent(i, new MenuItem(CYAN_GLASS));
+                setComponent(i, new Label(CYAN_GLASS));
         }
     }
 
     private void addUpgradeToMenu(int slot, HoeUpgrade<?> upgrade) {
         ItemStack menuItem = upgrade.getMenuItem(this.hoe);
-        addComponent(slot, new MenuButton(menuItem, ((event, player, gui) -> {
+        setComponent(slot, new Button(menuItem, (menu, player, event) -> {
             if (event.getAction() == InventoryAction.PICKUP_ALL) {
                 if (HoeManager.canBuy(this.hoe, upgrade))
                     HoeManager.buyUpgrade(this.hoe, player, upgrade);
@@ -77,6 +83,6 @@ public class HoeMenu extends Menu {
                 }
                 player.closeInventory();
             }
-        })));
+        }));
     }
 }

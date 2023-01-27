@@ -1,6 +1,6 @@
 package io.github.itstaylz.sakurabranch;
 
-import io.github.itstaylz.hexlib.storage.files.YamlFile;
+import io.github.itstaylz.hexlib.storage.file.YamlFile;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 

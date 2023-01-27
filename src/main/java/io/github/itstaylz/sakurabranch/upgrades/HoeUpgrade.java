@@ -74,7 +74,7 @@ public abstract class HoeUpgrade<E extends Event> {
                 builder.addLore(StringUtils.colorize("&7Price: &a$" + priceFormatted));
                 builder.addLore(StringUtils.colorize("&7Left-Click to &aBuy"));
             } else {
-                String incompatibleString = StringUtils.appendArray(incompatibles.toArray(new String[0]), ",");
+                String incompatibleString = StringUtils.joinStrings(incompatibles.toArray(new String[0]), ", ");
                 builder.addLore(StringUtils.colorize("&c&lINCOMPATIBLE WITH: &f" + incompatibleString));
             }
         }

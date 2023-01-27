@@ -5,6 +5,9 @@ import io.github.itstaylz.hexlib.utils.PlayerUtils;
 import io.github.itstaylz.hexlib.utils.StringUtils;
 import io.github.itstaylz.sakurabranch.SakuraBranch;
 import io.github.itstaylz.sakurabranch.utils.*;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -33,7 +36,8 @@ public class AutoSellUpgrade extends HoeUpgrade<BlockDropItemEvent> {
             if (singlePrice != -1) {
                 double totalPrice = singlePrice * stack.getAmount();
                 SakuraBranch.getEconomy().depositPlayer(player, totalPrice);
-                PlayerUtils.sendActionbarMessage(player, StringUtils.colorize("&a+" + totalPrice + "$"));
+                BaseComponent[] actionBarMessage = TextComponent.fromLegacyText(StringUtils.colorize("&a+" + totalPrice + "$"));
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, actionBarMessage);
                 toRemove.add(item);
             }
         }
