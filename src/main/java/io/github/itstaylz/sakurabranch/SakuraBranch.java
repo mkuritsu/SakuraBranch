@@ -17,6 +17,7 @@ public final class SakuraBranch extends JavaPlugin implements Listener {
 
     private static Economy economy;
     private static SakuraConfig config;
+    private static MessagesConfig messagesConfig;
 
     @Override
     public void onEnable() {
@@ -25,9 +26,11 @@ public final class SakuraBranch extends JavaPlugin implements Listener {
             getLogger().severe("Failed to setup economy! Check if you have vault and a compatible economy plugin.");
             return;
         }
+        messagesConfig = new MessagesConfig(this);
         config = new SakuraConfig(this);
         Bukkit.getPluginManager().registerEvents(new HoeListener(), this);
         getCommand("sakurabranch").setExecutor(new SakuraBranchCommand());
+        getCommand("sakurabranchreload").setExecutor(new SakuraBranchCommand());
     }
 
     private boolean setupEconomy() {
@@ -40,6 +43,10 @@ public final class SakuraBranch extends JavaPlugin implements Listener {
         return true;
     }
 
+    public static MessagesConfig getMessagesConfig() {
+        return messagesConfig;
+    }
+
     public static Economy getEconomy() {
         return economy;
     }
@@ -48,7 +55,7 @@ public final class SakuraBranch extends JavaPlugin implements Listener {
         return config;
     }
 
-    private static final class SakuraBranchCommand implements CommandExecutor {
+    private final class SakuraBranchCommand implements CommandExecutor {
 
         @Override
         public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -62,7 +69,7 @@ public final class SakuraBranch extends JavaPlugin implements Listener {
                 String playerName = args[0];
                 Player target = Bukkit.getPlayerExact(playerName);
                 if (target == null) {
-                    sender.sendMessage(StringUtils.colorize("&7&l[&d&lSakura&b&lMC&7&l] &cPlayer not found!"));
+                    sender.sendMessage(StringUtils.colorize(getMessagesConfig().getMessage("player_not_found")));
                 } else {
                     ItemStack hoe = HoeManager.createNewHoe();
                     if (PlayerUtils.canPickup(target, hoe))
@@ -72,6 +79,18 @@ public final class SakuraBranch extends JavaPlugin implements Listener {
                 }
             }
             return true;
+        }
+    }
+
+    private final class ReloadCommand implements CommandExecutor {
+        @Override
+        public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+            if (command.getName().equalsIgnoreCase("sakurabranchreload")) {
+                SakuraBranch.getMessagesConfig().reload();
+                sender.sendMessage(StringUtils.colorize("&aSakuraBranch has been reloaed!"));
+                return true;
+            }
+            return false;
         }
     }
 

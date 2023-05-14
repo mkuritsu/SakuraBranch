@@ -1,0 +1,13 @@
+player_not_found: "&7&l[&d&lSakura&b&lMC&7&l] &cPlayer not found!"
+
+inventory_full_message: "&7&l[&d&lSakura&b&lMC&7&l] &b&l{upgrade} &7> &c&lWarning! &7Inventory full!"
+
+cannot_apply_message: "&7&l[&d&lSakura&b&lMC&7&l] &cYou can't buy this upgrade!"
+
+cannot_refund_message: "&7&l[&d&lSakura&b&lMC&7&l] &cYou can't refund this upgrade!"
+
+upgrade_bought: "&7&l[&d&lSakura&b&lMC&7&l] &dYou have bought &b{upgrade}"
+
+upgrade_refunded: "&7&l[&d&lSakura&b&lMC&7&l] &dYou have refunded &b{upgrade}"
+
+not_enough_money: "&7&l[&d&lSakura&b&lMC&7&l] &cYou don't have enough money to buy this upgrade!"

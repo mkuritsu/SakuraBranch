@@ -3,6 +3,7 @@ package io.github.itstaylz.sakurabranch.upgrades;
 import io.github.itstaylz.hexlib.items.SkullBuilder;
 import io.github.itstaylz.hexlib.utils.PlayerUtils;
 import io.github.itstaylz.hexlib.utils.StringUtils;
+import io.github.itstaylz.sakurabranch.MessagesConfig;
 import io.github.itstaylz.sakurabranch.SakuraBranch;
 import io.github.itstaylz.sakurabranch.utils.*;
 import org.bukkit.Sound;
@@ -37,8 +38,10 @@ public class AutoPickupUpgrade extends HoeUpgrade<BlockDropItemEvent> {
             }
         }
         event.getItems().removeAll(toRemove);
-        if (!event.getItems().isEmpty())
-            player.sendMessage(StringUtils.colorize("&7&l[&d&lSakura&b&lMC&7&l] &b&l" + getName() + "&7> &c&lWarning! &7Inventory full!"));
+        if (!event.getItems().isEmpty()) {
+            String message = SakuraBranch.getMessagesConfig().getMessage("inventory_full_message").replace("{upgrade}", getName());
+            player.sendMessage(message);
+        }
     }
 
     @Override

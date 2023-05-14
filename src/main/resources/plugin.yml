@@ -8,4 +8,8 @@ commands:
 
   sakurabranch:
     permission: sakurabranch.givecommand
-    permission-message: §7§l[§d§lSakura&b§lMC§7§l] §cNo permission
+    permission-message: §cNo permission
+
+  sakurabranchreload:
+    permission: sakurabranch.reload
+    permission-message: §cNo permission

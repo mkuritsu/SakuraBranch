@@ -117,10 +117,12 @@ public class HoeManager {
         if (balance >= price) {
             SakuraBranch.getEconomy().withdrawPlayer(player, price);
             addUpgrade(hoe, upgrade, currentLevel + 1);
-            player.sendMessage(StringUtils.colorize("&7&l[&d&lSakura&b&lMC&7&l] &dYou have bought &b" + upgrade.getName()));
+            String message = SakuraBranch.getMessagesConfig().getMessage("upgrade_bought").replace("{upgrade}", upgrade.getName());
+            player.sendMessage(StringUtils.colorize(message));
             player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 0.5f);
         } else {
-            player.sendMessage(StringUtils.colorize("&7&l[&d&lSakura&b&lMC&7&l] &cYou don't have enough money to buy this upgrade!"));
+            String message = SakuraBranch.getMessagesConfig().getMessage("not_enough_money");
+            player.sendMessage(message);
             player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT , 1f, 0.5f);
         }
     }
@@ -133,7 +135,8 @@ public class HoeManager {
         }
         SakuraBranch.getEconomy().depositPlayer(player, refundAmount);
         removeUpgrade(hoe, upgrade);
-        player.sendMessage(StringUtils.colorize("&7&l[&d&lSakura&b&lMC&7&l] &dYou have refunded &b" + upgrade.getName()));
+        String message = SakuraBranch.getMessagesConfig().getMessage("upgrade_refunded").replace("{upgrade}", upgrade.getName());
+        player.sendMessage(StringUtils.colorize(message));
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 0.5f);
     }
 

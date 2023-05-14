@@ -69,7 +69,8 @@ public class HoeMenu extends Menu {
                 if (HoeManager.canBuy(this.hoe, upgrade))
                     HoeManager.buyUpgrade(this.hoe, player, upgrade);
                 else {
-                    player.sendMessage(StringUtils.colorize("&7&l[&d&lSakura&b&lMC&7&l] &cYou can't buy this upgrade!"));
+
+                    player.sendMessage(StringUtils.colorize(SakuraBranch.getMessagesConfig().getMessage("cannot_apply_message")));
                     player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f);
                 }
                 player.closeInventory();
@@ -78,7 +79,7 @@ public class HoeMenu extends Menu {
                     HoeManager.refundUpgrade(this.hoe, player, upgrade);
                 }
                 else {
-                    player.sendMessage(StringUtils.colorize("&7&l[&d&lSakura&b&lMC&7&l] &cYou can't refund this upgrade!"));
+                    player.sendMessage(StringUtils.colorize(SakuraBranch.getMessagesConfig().getMessage("cannot_refund_message")));
                     player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f);
                 }
                 player.closeInventory();
